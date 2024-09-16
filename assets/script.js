@@ -72,9 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Add "Delete All" button at the bottom
-      const deleteAllButton = document.createElement("button");
-      deleteAllButton.textContent = "Delete All";
-      deleteAllButton.classList.add("btn", "btn-danger", "mt-3");
+      const deleteAllButton = document.getElementById("deleteAllButton");
       deleteAllButton.addEventListener("click", deleteAllRequests);
 
       requestList.parentElement.appendChild(deleteAllButton);
