@@ -70,6 +70,14 @@ document.addEventListener("DOMContentLoaded", function () {
           requestList.appendChild(li);
         });
       }
+
+      // Add "Delete All" button at the bottom
+      const deleteAllButton = document.createElement("button");
+      deleteAllButton.textContent = "Delete All";
+      deleteAllButton.classList.add("btn", "btn-danger", "mt-3");
+      deleteAllButton.addEventListener("click", deleteAllRequests);
+
+      requestList.parentElement.appendChild(deleteAllButton);
     }
   };
 
@@ -94,4 +102,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // Refresh the list
     displayRequests();
   };
+
+  // Delete all requests function
+  function deleteAllRequests() {
+    if (confirm("Are you sure you want to delete all requests?")) {
+      // Clear all requests from localStorage
+      localStorage.removeItem("songRequests");
+
+      // Refresh the list
+      displayRequests();
+    }
+  }
 });
