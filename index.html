@@ -3,69 +3,40 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DJ Rich "Meltdown" Hall</title>
+    <title>DJ Rich "Meltdown" Hall - Request a Song</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
     />
   </head>
   <body class="bg-dark text-bg-dark p-3">
-    <h1>DJ Rich "Meltdown" Hall</h1>
-    <p class="text-bg-dark">Make a request and make your night!</p>
-    <form class="container-sm">
+    <h1 class="text-center">DJ Rich "Meltdown" Hall</h1>
+    <p class="text-center">Make a request and make your night!</p>
+
+    <!-- Form for song requests -->
+    <form id="requestForm" class="container-sm mb-5">
       <div class="mb-3">
-        <label for="artist" class="form-label">Artist</label>
-        <input
-          type="text"
-          class="form-control"
-          id="artist-request"
-          aria-describedby="artist-request"
-        />
-        <div id="artist-request" class="form-text" aria-placeholder="artist">
-          Name of the Artist or Band you would like to hear
-        </div>
-        <div class="mb-3">
-          <label for="song-choice" class="form-label" aria-placeholder="song"
-            >Song Choice</label
-          >
-          <input type="text" class="form-control" id="song-choice" />
-        </div>
-        <label for="name" class="form-label">Your Name</label>
-        <input
-          type="text"
-          class="form-control"
-          id="name"
-          aria-describedby="name"
-        />
-        <div id="message" class="form-text" aria-placeholder="message">
-          Name of the Artist or Band you would like to hear
-        </div>
-        <div class="mb-3">
-          <label for="message" class="form-label" aria-placeholder="message"
-            >Message for Rich!</label
-          >
-          <input type="text" class="form-control" id="message" />
-        </div>
+        <label for="artistName" class="form-label">Artist</label>
+        <input type="text" id="artistName" class="form-control" />
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <div class="mb-3">
+        <label for="songName" class="form-label">Song</label>
+        <input type="text" id="songName" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="userName" class="form-label">Your Name</label>
+        <input type="text" id="userName" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="userMessage" class="form-label">Message for Rich!</label>
+        <textarea id="userMessage" class="form-control" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit Request</button>
     </form>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
+
+    <a href="requests.html" class="btn btn-secondary">View Requested Songs</a>
+
+    <!-- Link to the external JavaScript file -->
+    <script src="/assets/script.js"></script>
   </body>
-  <footer></footer>
-  <script
-    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-    crossorigin="anonymous"
-  ></script>
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-    crossorigin="anonymous"
-  ></script>
 </html>
