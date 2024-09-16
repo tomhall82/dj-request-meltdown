@@ -1,114 +1,110 @@
 document.addEventListener("DOMContentLoaded", function () {
   const requestForm = document.getElementById("requestForm");
 
-  // Handle form submission
   if (requestForm) {
-    requestForm.addEventListener("submit", function (event) {
+    requestForm.addEventListener("submit", async function (event) {
       event.preventDefault();
 
-      // Get form values
       const artistName = document.getElementById("artistName").value;
       const songName = document.getElementById("songName").value;
       const userName = document.getElementById("userName").value;
       const userMessage = document.getElementById("userMessage").value;
+      const timestamp = new Date().toLocaleString();
 
-      // Get the current timestamp
-      const timestamp = new Date().toLocaleString(); // Format: "MM/DD/YYYY, HH:MM:SS AM/PM"
-
-      // Create request object
       const request = {
         artistName,
         songName,
         userName,
         userMessage,
-        timestamp, // Include the timestamp in the request object
+        timestamp,
       };
 
-      // Get existing requests from localStorage or initialize an empty array
-      let requests = JSON.parse(localStorage.getItem("songRequests")) || [];
+      try {
+        await fetch("http://localhost:3000/requests", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(request),
+        });
 
-      // Add new request to the array
-      requests.push(request);
-
-      // Save updated array back to localStorage
-      localStorage.setItem("songRequests", JSON.stringify(requests));
-
-      // Clear the form
-      requestForm.reset();
-      alert("Request submitted!");
+        requestForm.reset();
+        alert("Request submitted!");
+      } catch (error) {
+        console.error("Error submitting request:", error);
+      }
     });
   }
 
-  // Function to display song requests on the requested-songs.html page
-  const displayRequests = () => {
+  const displayRequests = async () => {
     const requestList = document.getElementById("requestList");
 
     if (requestList) {
-      const requests = JSON.parse(localStorage.getItem("songRequests")) || [];
+      try {
+        const response = await fetch("http://localhost:3000/requests");
+        const requests = await response.json();
 
-      // Clear the current list before adding updated requests
-      requestList.innerHTML = "";
+        requestList.innerHTML = "";
 
-      if (requests.length === 0) {
-        requestList.innerHTML =
-          "<li class='list-group-item'>No requests yet!</li>";
-      } else {
-        requests.forEach((request, index) => {
-          const li = document.createElement("li");
-          li.classList.add(
-            "list-group-item",
-            "d-flex",
-            "justify-content-between"
-          );
+        if (requests.length === 0) {
+          requestList.innerHTML =
+            "<li class='list-group-item'>No requests yet!</li>";
+        } else {
+          requests.forEach((request, index) => {
+            const li = document.createElement("li");
+            li.classList.add(
+              "list-group-item",
+              "d-flex",
+              "justify-content-between"
+            );
 
-          // Display the request details along with the timestamp
-          li.innerHTML = `
-              <span>${request.songName} by ${request.artistName}. Requested by ${request.userName}: ${request.userMessage}. Submitted on: ${request.timestamp}</span>
-              <button class="btn btn-danger btn-sm" onclick="deleteRequest(${index})">Delete</button>
-            `;
+            li.innerHTML = `
+                <span>${request.songName} by ${request.artistName}. Requested by ${request.userName}: ${request.userMessage}. Submitted on: ${request.timestamp}</span>
+                <button class="btn btn-danger btn-sm" onclick="deleteRequest(${index})">Delete</button>
+              `;
 
-          requestList.appendChild(li);
-        });
+            requestList.appendChild(li);
+          });
+
+          const deleteAllButton = document.getElementById("deleteAllButton");
+          deleteAllButton.addEventListener("click", deleteAllRequests);
+
+          requestList.parentElement.appendChild(deleteAllButton);
+        }
+      } catch (error) {
+        console.error("Error fetching requests:", error);
       }
-
-      // Add "Delete All" button at the bottom
-      const deleteAllButton = document.getElementById("deleteAllButton");
-      deleteAllButton.addEventListener("click", deleteAllRequests);
-
-      requestList.parentElement.appendChild(deleteAllButton);
     }
   };
 
-  // If we're on the requested-songs.html page, refresh the list every 10 seconds
   if (document.getElementById("requestList")) {
-    displayRequests(); // Display immediately on page load
-
-    // Auto-refresh every 10 seconds (10,000 milliseconds)
+    displayRequests();
     setInterval(displayRequests, 10000);
   }
 
-  // Delete request function
-  window.deleteRequest = function (index) {
-    let requests = JSON.parse(localStorage.getItem("songRequests")) || [];
+  window.deleteRequest = async function (index) {
+    try {
+      await fetch(`http://localhost:3000/requests/${index}`, {
+        method: "DELETE",
+      });
 
-    // Remove the selected request by index
-    requests.splice(index, 1);
-
-    // Save updated array back to localStorage
-    localStorage.setItem("songRequests", JSON.stringify(requests));
-
-    // Refresh the list
-    displayRequests();
+      displayRequests();
+    } catch (error) {
+      console.error("Error deleting request:", error);
+    }
   };
 
-  // Delete all requests function
-  function deleteAllRequests() {
+  async function deleteAllRequests() {
     if (confirm("Are you sure you want to delete all requests?")) {
-      // Clear all requests from localStorage
-      localStorage.removeItem("songRequests");
+      try {
+        await fetch("http://localhost:3000/requests", {
+          method: "DELETE",
+        });
 
-      // Refresh the list
-      displayRequests();
+        displayRequests();
+      } catch (error) {
+        console.error("Error deleting all requests:", error);
+      }
     }
   }
 });
